@@ -14,36 +14,102 @@ use Zend\View\Model\ViewModel;
 use Zend\Mail;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
+use Athos\Form\ContatoForm;
+use Athos\Form\FormFilter;
 
 class ContatoController extends AbstractActionController
 {
     public function indexAction()
     {
          
-        $mail = new Mail\Message();
-        $mail->setBody('Mensagem teste.');
-        $mail->setFrom('atendimento@athospublicidade.com.br', 'Athos - Desenvolvimento e Publicidade');
-        $mail->addTo('leonardo.souzas30@gmail.com', 'Leonardo');
-        $mail->setSubject('Assunto');
 
-        $transport = new SmtpTransport();
-        $options   = new SmtpOptions(array(
-            'name'              => 'athospublicidade.com.br',
-            'host' => 'smtp.gmail.com',
-            'port'              => 465, // Notice port change for TLS is 587
-            'connection_class'  => 'login',
-            'connection_config' => array(
-            'ssl' => 'ssl',
-            'username' => 'atendimento@athospublicidade.com.br',
-            'password' => 'athos@2341',
-            ),
-        ));
-        
-        $transport->setOptions($options);
-        $transport->send($mail);
-        
 	$this->layout('layout/layout_contato.phtml');
+        
+        $form = new ContatoForm();
+        
+        $inputFilter = new FormFilter();
+        
+        $request = $this->getRequest();
+        
+         if($request->isPost())
+         {
+           
+             $array_post = $request->getPost()->toArray();
 
-        return new ViewModel();
+             $post = array_merge_recursive($array_post);
+           
+           
+           
+           $form->setData($post);
+
+           $form->setInputFilter($inputFilter->getInputFilter());
+           
+               
+               if($form->isValid())
+               {
+                 
+                   
+                   $html = "<html>
+                              <body>
+                              <strong>Cliente:</strong> ".$array_post["nome"]."<br><br>".
+                             "<strong>Email:</strong> ".$array_post["email"]."<br><br>".
+                             "<strong>Assunto:</strong> ".$array_post["assunto"]."<br><br>".
+                             "<strong>Mensagem:</strong> ".$array_post["mensagem"]."<br><br>".
+                             "</body>
+                             </html>
+                            "; 
+                    
+
+
+    
+                   
+                    $mail = new Mail\Message();
+                    
+                    $bodyPart = new \Zend\Mime\Message();
+                    
+                    $bodyMessage = new \Zend\Mime\Part($html);
+                    $bodyMessage->type = 'text/html';
+
+                    $bodyPart->setParts(array($bodyMessage));
+
+                    
+                    
+                    $mail->setBody($bodyPart);
+                    $mail->setFrom('atendimento@athospublicidade.com.br', "Contato Athos - ".$array_post["nome"]);
+                    $mail->addTo('atendimento@athospublicidade.com.br', $array_post["nome"]);
+                    $mail->setSubject($array_post["assunto"]);
+                    $mail->setEncoding('UTF-8');
+
+                    $transport = new SmtpTransport();
+                    $options   = new SmtpOptions(array(
+                        'name'              => 'athospublicidade.com.br',
+                        'host' => 'smtp.gmail.com',
+                        'port'              => 465,
+                        'connection_class'  => 'login',
+                        'connection_config' => array(
+                            'ssl' => 'ssl',
+                            'username' => 'atendimento@athospublicidade.com.br',
+                            'password' => 'athos@2341',
+                        ),
+                        
+                        ));
+        
+                    $transport->setOptions($options);
+                    $transport->send($mail);
+        
+
+                 echo "<script>alert(\"Sua mensagem foi enviada com sucesso, em breve entraremos em contato\");</script>"
+                    . " <meta http-equiv=\"refresh\" content=\"0;URL=http://athospublicidade.com.br\">";
+
+               }
+           
+           
+           
+           
+           
+
+         }  
+        
+        return new ViewModel(array('form' => $form));
     }
 }

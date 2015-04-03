@@ -35,24 +35,24 @@
 							</div>
 
 							<h2 class="short"><strong>Contato</strong></h2>
-							<form id="contactForm" action="php/contact-form.php" method="POST">
+							<?php echo $this->form()->openTag($form); ?>
 								<div class="row">
 									<div class="form-group">
 										<div class="col-md-6">
 											<label>Nome *</label>
-											<input type="text" value="" data-msg-required="Entre com seu nome." maxlength="100" class="form-control" name="nome" id="nome" required>
+											<?php echo $this->formRow($form->get('nome'));?>
 										</div>
 										<div class="col-md-6">
 											<label>Email *</label>
-											<input type="email" value="" data-msg-required="Entre com seu email." data-msg-email="Por favor entre com um endereço de email válido." maxlength="100" class="form-control" name="email" id="email" required>
+											<?php echo $this->formRow($form->get('email'));?>
 										</div>
 									</div>
 								</div>
 								<div class="row">
 									<div class="form-group">
 										<div class="col-md-12">
-											<label>Assunto</label>
-											<input type="text" value="" data-msg-required="Entre com o assunto." maxlength="100" class="form-control" name="subject" id="subject" required>
+											<label>Assunto *</label>
+											<?php echo $this->formRow($form->get('assunto'));?>
 										</div>
 									</div>
 								</div>
@@ -60,16 +60,16 @@
 									<div class="form-group">
 										<div class="col-md-12">
 											<label>Mensagem *</label>
-											<textarea maxlength="5000" data-msg-required="Escreva sua mensagem." rows="10" class="form-control" name="message" id="message" required></textarea>
+											<?php echo $this->formRow($form->get('mensagem'));?>
 										</div>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-md-12">
-										<input type="submit" value="Enviar Mensagem" class="btn btn-primary btn-lg" data-loading-text="Loading...">
+										<?php echo $this->formRow($form->get('enviar'));?>
 									</div>
 								</div>
-							</form>
+							<?php echo $this->form()->closeTag(); ?>
 						</div>
 						<div class="col-md-6">
 
