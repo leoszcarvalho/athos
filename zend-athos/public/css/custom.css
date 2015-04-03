@@ -1,0 +1,44 @@
+.custom-menu
+{
+	width:150px;
+	text-align:center;
+}
+
+.color-box-red-bd
+{
+	border-top-color:#E36159 !important;
+	
+	}
+
+.color-box-red-bg
+{
+	background-color:#E36159 !important;;
+	
+	}
+
+.color-box-red-txt
+{
+	color:#E36159 !important;;
+	
+	}
+
+
+
+
+.color-box-blue-bd
+{
+	border-top-color:#0088cc !important;
+	
+	}
+	
+.color-box-blue-bg
+{
+	background-color:#0088cc !important;
+	
+	}
+	
+.color-box-blue-txt
+{
+	color:#0088cc !important;;
+	
+	}
